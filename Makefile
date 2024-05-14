@@ -43,6 +43,13 @@ ENABLE_SCAN_RANGES            ?= 1
 ENABLE_FEAT_F4HWN             ?= 1
 ENABLE_FEAT_F4HWN_FIXED_PWR   ?= 0
 
+# ---- ENABLE_FMRADIO sub options
+# ENABLE_FMRADIO_SIMPLE removes autoscan, freq input and memory management to keep the strict minimum: a VFO and a scanner.
+# This reduces the footprint of the FMRADIO app.
+ENABLE_FMRADIO_SIMPLE         ?= 1
+# Deactivate the F+1 band management to keep only 1 band. See basecode (settings.c) to select the band of your choice.
+ENABLE_FMRADIO_SIMPLE_MONOBAND ?= 1
+
 # ---- DEBUGGING ----
 ENABLE_AM_FIX_SHOW_DATA       ?= 0
 ENABLE_AGC_SHOW_DATA          ?= 0
@@ -57,7 +64,7 @@ ENABLE_LTO                    ?= 1
 #############################################################
 
 ifeq ($(ENABLE_FEAT_F4HWN),1)
-	TARGET = f4hwn
+	TARGET = f4hwn_simplefm
 else
 	TARGET = firmware
 endif
@@ -211,7 +218,7 @@ ifeq ($(ENABLE_FEAT_F4HWN),1)
 	VERSION_STRING_1 ?= v0.22
 
 	AUTHOR_STRING_2 ?= F4HWN
-	VERSION_STRING_2 ?= v2.7
+	VERSION_STRING_2 ?= v2.7_sfm
 
 	AUTHOR_STRING ?= $(AUTHOR_STRING_1)+$(AUTHOR_STRING_2)
 	VERSION_STRING ?= $(VERSION_STRING_2)
@@ -282,6 +289,12 @@ ifeq ($(ENABLE_AIRCOPY),1)
 endif
 ifeq ($(ENABLE_FMRADIO),1)
 	CFLAGS += -DENABLE_FMRADIO
+	ifeq ($(ENABLE_FMRADIO_SIMPLE),1)
+		CFLAGS += -DENABLE_FMRADIO_SIMPLE
+		ifeq ($(ENABLE_FMRADIO_SIMPLE_MONOBAND),1)
+			CFLAGS += -DENABLE_FMRADIO_SIMPLE_MONOBAND
+		endif
+	endif
 endif
 ifeq ($(ENABLE_UART),1)
 	CFLAGS += -DENABLE_UART

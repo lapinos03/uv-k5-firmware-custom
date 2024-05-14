@@ -103,7 +103,7 @@ void UI_DisplayWelcome(void)
 			gFrameBuffer[3][i] ^= 0x80;
 		}
 
-		for (uint8_t i = 18; i < 110; i++)
+		for (uint8_t i = 0; i < 128; i++)
 		{
 			gFrameBuffer[4][i] ^= 0xFF;
 		}

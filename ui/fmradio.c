@@ -49,6 +49,17 @@ void UI_DisplayFM(void)
 	//sprintf(String, "%d0k", spacings[gEeprom.FM_Space % 3]);
 	//UI_PrintStringSmallNormal(String, 127 - 4*7, 0, 6);
 
+#ifdef ENABLE_FMRADIO_SIMPLE
+	if (gFM_ScanState == FM_SCAN_OFF) {
+		pPrintStr = "VFO";
+	} else {
+		pPrintStr = "M-SCAN";
+	}
+	UI_PrintString(pPrintStr, 0, 127, 3, 10); // memory, vfo, scan
+	memset(String, 0, sizeof(String));
+	sprintf(String, "%3d.%d", gEeprom.FM_FrequencyPlaying / 10, gEeprom.FM_FrequencyPlaying % 10);
+	UI_DisplayFrequency(String, 36, 1, true);  // frequency
+#else
 	if (gAskToSave) {
 		pPrintStr = "SAVE?";
 	} else if (gAskToDelete) {
@@ -95,6 +106,7 @@ void UI_DisplayFM(void)
 	}
 
 	UI_PrintString(String, 0, 127, 1, 10);
+#endif
 
 	ST7565_BlitFullScreen();
 }

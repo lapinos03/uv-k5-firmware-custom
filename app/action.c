@@ -373,6 +373,7 @@ static void ACTION_Scan_FM(bool bRestart)
 
 	uint16_t freq;
 
+#ifndef ENABLE_FMRADIO_SIMPLE
 	if (bRestart) {
 		gFM_AutoScan = true;
 		gFM_ChannelPosition = 0;
@@ -383,9 +384,18 @@ static void ACTION_Scan_FM(bool bRestart)
 		gFM_ChannelPosition = 0;
 		freq = gEeprom.FM_FrequencyPlaying;
 	}
+#else
+	{
+		freq = gEeprom.FM_FrequencyPlaying;
+	}
+#endif
 
 	BK1080_GetFrequencyDeviation(freq);
+#ifdef ENABLE_FMRADIO_SIMPLE__
+	FM_Tune(freq, gFM_LastUpDownStep, bRestart);
+#else
 	FM_Tune(freq, 1, bRestart);
+#endif
 
 #ifdef ENABLE_VOICE
 	gAnotherVoiceID = VOICE_ID_SCANNING_BEGIN;

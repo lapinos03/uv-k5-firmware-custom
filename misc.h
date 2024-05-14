@@ -321,7 +321,7 @@ extern uint8_t               gFSKWriteIndex;
 extern volatile bool         gNextTimeslice;
 extern bool                  gUpdateDisplay;
 extern bool                  gF_LOCK;
-#ifdef ENABLE_FMRADIO
+#if defined(ENABLE_FMRADIO) && !defined(ENABLE_FMRADIO_SIMPLE)
 	extern uint8_t           gFM_ChannelPosition;
 #endif
 extern uint8_t               gShowChPrefix;

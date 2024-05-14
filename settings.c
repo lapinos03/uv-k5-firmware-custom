@@ -96,7 +96,17 @@ void SETTINGS_InitEEPROM(void)
 		} __attribute__((packed)) fmCfg;
 		EEPROM_ReadBuffer(0x0E88, &fmCfg, 4);
 
+#ifdef ENABLE_FMRADIO_SIMPLE_MONOBAND
+		enum FMbands {
+			FM_875_1080 = 0,
+			FM_760_1080,
+			FM_760_900,
+			FM_640_760,
+		};
+		gEeprom.FM_Band = FM_875_1080;
+#else
 		gEeprom.FM_Band = fmCfg.band;
+#endif
 		//gEeprom.FM_Space = fmCfg.space;
 		gEeprom.FM_SelectedFrequency = 
 			(fmCfg.selFreq >= BK1080_GetFreqLoLimit(gEeprom.FM_Band) && fmCfg.selFreq <= BK1080_GetFreqHiLimit(gEeprom.FM_Band)) ? 
